@@ -1,4 +1,6 @@
 class Mesa
+  attr_accessor :mesa
+
   def initialize(mesa, r1, r2, r3, r4)
     @mesa = mesa
     @r1 = r1.to_i
@@ -17,27 +19,24 @@ class Mesa
   end
 
   def average
-    return (@r1 + @r2 + @r3 + @r4)/4
+    return (@r1 + @r2 + @r3 + @r4).to_f/4
   end
+
 end
 
-def read_file(mesa_list, max_reca, average)
+def read_file()
   data = []
+  mesa_list = []
+
   File.open('casino.txt','r') { |file| data = file.readlines}
   data.each do |mesa|
     ls = mesa.split(', ')
-    mesa = Mesa.new(*ls)
-    mesa_list << mesa
-    max_reca << mesa.max_recaudado
-    average << mesa.average
+    mesa_list << Mesa.new(*ls)
   end
-  return mesa_list, max_reca, average
+  return mesa_list
 end
 
-mesa_list = []
-max_reca = []
-average = []
 
-read_file(mesa_list, max_reca, average)
-max_reca.each {|mesa| puts "El máximo recaudado en la #{mesa[0]} fue de #{mesa[1]} y se dio el día #{mesa[2]}" }
-puts "El promedio total de todas las mesas fue de: #{average.sum/average.size.to_f}"
+mesa_list = read_file()
+mesa_list.each {|mesa| puts "El máximo recaudado en la #{mesa.mesa} fue de #{mesa.max_recaudado[1]} y se dio el día #{mesa.max_recaudado[2]}" }
+puts "El promedio total de todas las mesas es: #{mesa_list.inject(0) {|suma, mesa| suma + mesa.average } / 4}"
